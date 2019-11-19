@@ -47,10 +47,10 @@ public:
      * \param[in] cap Размер (емкость) массива.
      */
     SafeArray(size_t cap);
-    
 
-    // TODO: не забудьте про конструктор копирования и еще кое-что!
-    
+	SafeArray(SafeArray<T> const& other);
+
+	SafeArray<T> &operator=(SafeArray<T> const& other);
     /** \brief Деструктор.
      *
      *  Освобождает занимаемую массивом память.
@@ -73,7 +73,7 @@ public:
      *
      *  Возвращает константную ссылку на элемент, которая может находиться только в позиции \a rhv.
      */
-    const T& operator[] (size_t k) const;
+    const T& operator[] (const size_t k) const;
 
    
     /// Возвращает "сырой" константный указатель на массив. Используется только для специальных целей
