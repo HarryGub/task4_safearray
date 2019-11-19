@@ -19,16 +19,67 @@
 
 
 // we have to indicate that methods of the class Safearray are also inside the namespace xi
-namespace xi {
+#include "safearray.h"
 
-
-template <typename T>
-SafeArray<T>::SafeArray(size_t cap)
+namespace xi
 {
+	template<typename T>
+	SafeArray<T>::SafeArray(size_t cap)
+	{
+		_capacity = cap;
+		_storage = new T[_capacity];
+	}
 
-    // TODO: здесь необходимо добавить реализацию метода
-}
+	template<typename T>
+	SafeArray<T>::~SafeArray()
+	{
+		delete[] _storage;
+		_capacity = 0;
+	}
 
-// TODO: реализуйте остальные методы по образцу выше
+	template<typename T>
+	T &SafeArray<T>::operator[](size_t k)
+	{
+		checkBounds(k);
+		return _storage[k];
+	}
 
+	template<typename T>
+	const T &SafeArray<T>::operator[](const size_t k) const
+	{
+		checkBounds(k);
+		return _storage[k];
+	}
+
+	template<typename T>
+	size_t SafeArray<T>::getCapacity() const
+	{
+		return _capacity;
+	}
+
+	template<typename T>
+	void SafeArray<T>::checkBounds(size_t index) const
+	{
+		if(index < 0 || index >= _capacity)
+			throw std::out_of_range("Index is out of bounds!");
+	}
+
+	template<typename T>
+	SafeArray<T>::SafeArray(SafeArray<T> const &other)
+	{
+		_storage = new T[other._capacity];
+		for(int i = 0; i < other._capacity; i++)
+			_storage[i] = other[i];
+		_capacity = other._capacity;
+	}
+
+	template<typename T>
+	SafeArray<T> &SafeArray<T>::operator=(SafeArray<T> const &other)
+	{
+		_storage = new T[other._capacity];
+		for(int i = 0; i < other._capacity; i++)
+			_storage[i] = other[i];
+		_capacity = other._capacity;
+		return *this;
+	}
 } // namespace xi
